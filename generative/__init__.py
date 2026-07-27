@@ -15,6 +15,10 @@ from .per_object_24d import (
     CellAddress, AddressedGrid, PerObjectTransformer, DualSolution,
     assign_cell_address, address_grid, solve_dual,
 )
+from .address_cluster_transformer import (
+    AddressCluster, AddressClusterTransformer, TripleSolution,
+    hamming_distance_24d, solve_triple,
+)
 
 __all__ = [
     "GridObject", "GridSentence", "ObjectPair",
@@ -27,4 +31,6 @@ __all__ = [
     "UBPActionEngine",
     "CellAddress", "AddressedGrid", "PerObjectTransformer", "DualSolution",
     "assign_cell_address", "address_grid", "solve_dual",
+    "AddressCluster", "AddressClusterTransformer", "TripleSolution",
+    "hamming_distance_24d", "solve_triple",
 ]
