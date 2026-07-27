@@ -15,7 +15,7 @@ The Abstraction and Reasoning Corpus, now in its third iteration, is François C
 The encoder is the only entirely new component in the architecture. Its job is to convert a 2-D coloured grid into a 24-bit vector that preserves the four orthogonal descriptors needed for downstream reasoning: which colours are present, how many objects each colour has, where the dominant object sits, and how the objects relate topologically. The bit budget in Figure 4.2 reuses the existing GLM01_substrate MOG_CATEGORIES partition verbatim — Mirrors bits 0–5, Information bits 6–11, Activation bits 12–17, Potential bits 18–23 — but assigns each quadrant a new ARC-specific role that maps onto its existing categories.
 
 ====
-# V0.7 setup (note this repository is at v0.8):
+# V0.7 setup (note this repository is at v0.11):
 ====
 
 ## arc_agi3 — GLM × ARC-AGI-3 Refinement Branch
