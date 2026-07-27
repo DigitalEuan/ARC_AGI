@@ -9,6 +9,12 @@ from .geometric_translator import (
     compute_signature, compute_transformation_signature,
     phi, R_n, geometric_tension, sub_cycles, analyze_reaction,
 )
+from .ubp_integration import (
+    nrci_fraction, nrci_refined_fraction,
+    TopologicalALU, ObserverDynamics,
+    GENESIS_SEEDS, get_genesis_seed,
+    R_n_fraction, geometric_tension_fraction,
+)
 
 __all__ = [
     "LingoTranslator", "LingoExpression", "SpatialCalculator",
@@ -17,4 +23,8 @@ __all__ = [
     "GeometricTranslator", "GeometricSignature",
     "compute_signature", "compute_transformation_signature",
     "phi", "R_n", "geometric_tension", "sub_cycles", "analyze_reaction",
+    "nrci_fraction", "nrci_refined_fraction",
+    "TopologicalALU", "ObserverDynamics",
+    "GENESIS_SEEDS", "get_genesis_seed",
+    "R_n_fraction", "geometric_tension_fraction",
 ]
