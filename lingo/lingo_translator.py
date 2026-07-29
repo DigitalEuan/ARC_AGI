@@ -46,7 +46,7 @@ _PKG_ROOT = os.path.dirname(os.path.dirname(__file__))
 if _PKG_ROOT not in sys.path:
     sys.path.insert(0, _PKG_ROOT)
 
-from spatial_arithmetic import value_to_radius, radius_to_value, OPCODE_TABLE, MODIFIER_TABLE
+from spatial_arithmetic_compat import value_to_radius, radius_to_value, OPCODE_TABLE, MODIFIER_TABLE
 from ldp_codec import geo_class, _phi, _sub_cycles, _is_prime, _factorize
 
 
@@ -373,7 +373,7 @@ class SpatialCalculator:
         Addition is the physical merger of node clusters and recalculation
         of the unified centroid. Uses spatial_arithmetic.natural_add.
         """
-        from spatial_arithmetic import natural_add
+        from spatial_arithmetic_compat import natural_add
         result, status = natural_add(a, b)
         if result is not None:
             return result
@@ -388,7 +388,7 @@ class SpatialCalculator:
         spatial radii. R(a) * R(b) gives the product's circumradius.
         """
         # Use the OPCODE_TABLE's MUL operation
-        from spatial_arithmetic import OPCODE_TABLE
+        from spatial_arithmetic_compat import OPCODE_TABLE
         op_fn = OPCODE_TABLE[3][1]  # 3 = MUL
         result = op_fn(a, b)
         return int(result) if result is not None else a * b
@@ -396,7 +396,7 @@ class SpatialCalculator:
     @staticmethod
     def subtract(a: int, b: int) -> int:
         """Subtraction via distance scaling (OPCODE_TABLE SUB)."""
-        from spatial_arithmetic import OPCODE_TABLE
+        from spatial_arithmetic_compat import OPCODE_TABLE
         op_fn = OPCODE_TABLE[5][1]  # 5 = SUB
         result = op_fn(a, b)
         return int(result) if result is not None else a - b
@@ -407,7 +407,7 @@ class SpatialCalculator:
 
         Returns a Fraction for exact arithmetic (no float drift).
         """
-        from spatial_arithmetic import OPCODE_TABLE
+        from spatial_arithmetic_compat import OPCODE_TABLE
         op_fn = OPCODE_TABLE[6][1]  # 6 = DIV
         result = op_fn(a, b)
         if result is not None:

@@ -60,7 +60,7 @@ from arc_loader import Grid, ARCTask
 from dsl import Ops, Operation, Program
 
 # Import the live Spatial Arithmetic primitives — NO simplification
-from spatial_arithmetic import (
+from spatial_arithmetic_compat import (
     value_to_radius, radius_to_value, encode, decode,
     OPCODE_TABLE, MODIFIER_TABLE,
     pairwise_centroid_distance, dihedral_angle, decode_modifier,

@@ -82,6 +82,10 @@ class Grid:
 
     # ── basic grid operations (used by DSL) ────────────────────────────────
 
+    def is_empty(self) -> bool:
+        """Check if grid is all zeros."""
+        return all(v == 0 for row in self.cells for v in row)
+
     def copy(self) -> "Grid":
         return Grid([row[:] for row in self.cells])
 

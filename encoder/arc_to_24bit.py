@@ -170,7 +170,7 @@ def _cardinality_to_6bit(n: int) -> int:
 # This is the proper integration the v2 study §4.2 specifies — no simplification.
 
 try:
-    from spatial_arithmetic import (
+    from spatial_arithmetic_compat import (
         value_to_radius, radius_to_value, encode as sa_encode,
         pairwise_centroid_distance,
     )

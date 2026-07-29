@@ -75,6 +75,21 @@ class GridObject:
     def cell_count(self) -> int:
         return len(self.cells)
 
+    # Compatibility properties for the full GenerativeTransformer
+    # which uses r1/c1/r2/c2 instead of bbox=(rmin, rmax, cmin, cmax)
+    @property
+    def r1(self) -> int:
+        return self.bbox[0]  # rmin
+    @property
+    def r2(self) -> int:
+        return self.bbox[1]  # rmax
+    @property
+    def c1(self) -> int:
+        return self.bbox[2]  # cmin
+    @property
+    def c2(self) -> int:
+        return self.bbox[3]  # cmax
+
     @property
     def width(self) -> int:
         return self.bbox[3] - self.bbox[2] + 1
@@ -196,7 +211,7 @@ def _encode_object(obj: GridObject, parent_grid: Grid) -> None:
     quadrant = (2 if cr > grid_cr else 0) + (1 if cc > grid_cc else 0)
 
     # Spatial radius via R(n) — n = cell count
-    from spatial_arithmetic import value_to_radius, radius_to_value
+    from spatial_arithmetic_compat import value_to_radius, radius_to_value
     n_cells = obj.cell_count
     if n_cells >= 3:
         R_n = value_to_radius(n_cells)

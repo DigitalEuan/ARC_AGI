@@ -19,6 +19,11 @@ from .address_cluster_transformer import (
     AddressCluster, AddressClusterTransformer, TripleSolution,
     hamming_distance_24d, solve_triple,
 )
+from .prediction_paths import (
+    predict_via_analogy, predict_via_chain, predict_via_groups,
+    predict_with_all_paths, detect_object_groups,
+    compute_structural_similarity, find_best_analogy,
+)
 
 __all__ = [
     "GridObject", "GridSentence", "ObjectPair",
@@ -33,4 +38,7 @@ __all__ = [
     "assign_cell_address", "address_grid", "solve_dual",
     "AddressCluster", "AddressClusterTransformer", "TripleSolution",
     "hamming_distance_24d", "solve_triple",
+    "predict_via_analogy", "predict_via_chain", "predict_via_groups",
+    "predict_with_all_paths", "detect_object_groups",
+    "compute_structural_similarity", "find_best_analogy",
 ]

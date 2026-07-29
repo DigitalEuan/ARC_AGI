@@ -69,13 +69,15 @@ class RankResult:
 
     @property
     def verdict(self) -> str:
-        """Four-way verdict per the v2 study §4.4."""
+        """v0.13 INVERTED: train-pass is PRIMARY, NRCI is coherence measurement.
+
+        Coherence ≠ correctness. NRCI measures Golay alignment, not rule correctness.
+        A candidate that passes train pairs is SUBMIT regardless of NRCI.
+        """
         if self.error:
             return "ERROR"
-        if self.train_pass and self.manifested:
-            return "SUBMIT"
-        if self.train_pass and not self.manifested:
-            return "MARGINAL"
+        if self.train_pass:
+            return "SUBMIT"  # train-pass = correct on train, trust it
         if not self.train_pass and self.manifested:
             return "CURIOSITY"
         return "DISCARD"
@@ -170,9 +172,9 @@ class Ranker:
         return results
 
     def top_k(self, task: ARCTask, candidates: List[Program], k: int = 3) -> List[RankResult]:
-        """Return the top-k SUBMIT-or-MARGINAL candidates."""
+        """Return the top-k train-pass candidates (v0.13: all train-pass are SUBMIT)."""
         results = self.rank(task, candidates)
-        return [r for r in results if r.verdict in ("SUBMIT", "MARGINAL")][:k]
+        return [r for r in results if r.train_pass and r.error is None][:k]
 
     def best(self, task: ARCTask, candidates: List[Program]) -> Optional[RankResult]:
         """Return the single best candidate, or None if no candidates pass even the train filter."""

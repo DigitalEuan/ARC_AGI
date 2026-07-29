@@ -40,7 +40,7 @@ from generative.object_extractor import (
 from generative.object_crg import ObjectCRG, ObjectTransformEdge
 
 # Spatial Arithmetic — the generative primitive
-from spatial_arithmetic import (
+from spatial_arithmetic_compat import (
     value_to_radius, radius_to_value, OPCODE_TABLE, MODIFIER_TABLE,
 )
 
