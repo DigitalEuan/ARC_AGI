@@ -14,164 +14,410 @@ The Abstraction and Reasoning Corpus, now in its third iteration, is François C
 ## Perception Layer: The 24-bit Grid Encoder on MOG_CATEGORIES
 The encoder is the only entirely new component in the architecture. Its job is to convert a 2-D coloured grid into a 24-bit vector that preserves the four orthogonal descriptors needed for downstream reasoning: which colours are present, how many objects each colour has, where the dominant object sits, and how the objects relate topologically. The bit budget in Figure 4.2 reuses the existing GLM01_substrate MOG_CATEGORIES partition verbatim — Mirrors bits 0–5, Information bits 6–11, Activation bits 12–17, Potential bits 18–23 — but assigns each quadrant a new ARC-specific role that maps onto its existing categories.
 
-====
-# V0.7 setup (note this repository is at v0.12):
-====
+# GLM × ARC-AGI-3 — Geometry Language Machine for ARC
 
-## arc_agi3 — GLM × ARC-AGI-3 Refinement Branch
-
-**Version:** v0.7.0 (SRCC monad + TGIC + Lingo chat + Bell partitions + CRG persistence)
+**Version:** v0.29 (Cortex + Thoughts Layer + Top-Down Coherence)
 **Author:** E. R. A. Craig (DigitalEuan), Auckland, NZ
-**Date:** 27 July 2026
+**Date:** 29 July 2026
 
-## v0.7 — The GLM Thinks
+## What this is
 
-v0.7 gives the GLM the ability to **think before it acts** — via Lingo chat, the Self-Referential Computational Cycle (SRCC), and Bell number partition analysis.
+A system that adapts the **Geometry Language Machine (GLM)** — built on the
+**Universal Binary Principle (UBP)**, Golay codes, Leech lattice, and the
+Y observer constant — to solve **ARC-AGI-3** abstraction-and-reasoning tasks.
 
-### New Components
+The GLM treats every ARC cell as a **physical object** with a 24-bit Leech
+lattice address (which IS a hex colour). Transformations are addressed as
+**displacements in 24-bit space**, not symbolic lookups. The system has
+**6 senses** (touch, sight, proprioception, audition, smell, taste), a
+**cortex** that derives relational rules, and a **thoughts layer** that
+writes structured reasoning as text.
 
-1. **Self-Referential Computational Cycle** (`generative/srcc.py`)
-   - Implements the UBP cycle as a **monad (T, η, μ)** per the Deep Dive Research Report
-   - The 12-component cycle = 4 layers × 3 functions (Reality/Information/Activation/Potential × Timing/Correction/Extraction)
-   - Monad laws verified: left unit, right unit, associativity all pass
-   - The RECURSION component feeds OUTPUT back to INPUT — the cycle runs on its own output until NRCI ≥ 0.70 (manifested)
-   - Uses TGIC's HomologyJump (escape local minima), InformationFunctional (energy), CanonicalEvolution (snap to codeword)
+## Current capability
 
-2. **TGIC v3** (`vendor/tgic_v3.py`)
-   - Aligned Triad-Graph Interaction Constraint — uses the REAL GolayCodeEngine
-   - HomologyJumpOperator: jump between cosets by XORing with octads
-   - InformationFunctional: Lyapunov energy (lower = more stable)
-   - CanonicalEvolution: iteratively snap toward a codeword
-   - Alignment verified: 4096 codewords, 759 octads, all zero syndrome
+**Solve rate: 2/50 (4%)** on 50 real ARC-AGI-2 training tasks.
 
-3. **Lingo Chat** (`lingo/lingo_chat.py`)
-   - The GLM "chats" about each task in UBP-Lingo before solving it
-   - Chat flows through the 4 MOG layers: Reality (observe) → Information (structure) → Activation (operations) → Potential (constraints)
-   - Each chat message has both Lingo and human-readable forms
-   - The chat is retained in the full system output as a reasoning trace
+The 2 solved tasks:
+- `1e0a9b12` — gravity (downward collapse), solved by DSL `GRAVITY_DOWN`
+- `45737921` — contextual recolour, solved by free k-arm with soft
+  neighbourhood matching
 
-4. **Bell Number Partition Analysis** (`generative/srcc.py`)
-   - Bell numbers count the ways to partition objects into transformation classes
-   - B(4)=15, B(8)=4140 — each partition is a distinct learning method
-   - With 8 objects (typical ARC task), there are 4140 possible learning methods
-   - The GLM searches this partition space to find the method that best fits the train pairs
-
-5. **CRG Persistence** (`generative/crg_persistence.py`)
-   - Save/load the ObjectCRG across tasks (the GLM's "memory")
-   - `merge_crgs()` accumulates learning — edges from new tasks reinforce existing edges
-   - State saved to `data/crg_state.json`
-
-6. **LDP Codec** (`vendor/ldp_codec.py`) — carried from v0.6
-   - Geometric class (10-bit structural fingerprint)
-   - Data-as-structure: integers are spatial clusters with topological mass
-
-### Dual Output
-
-Every task produces TWO outputs:
-- **ARC JSON**: the accepted submission format (grid of integers)
-- **Full system output**: Lingo chat, CRG stats, SRCC state, Bell analysis, NRCI coherence, geo_class fingerprints, Three Column check, Spatial Arithmetic calculations
-
-Nothing is dropped — the full depth is retained alongside the ARC format.
-
-## Results
-
-| Metric | v0.5 | v0.6 | v0.7 |
-|--------|------|------|------|
-| Solve rate (5 real tasks) | 10% | 10% | **20%** |
-| Time per task | 0.57s | 0.57s | 0.57s |
-| Lingo chat | ✗ | ✗ | ✓ |
-| SRCC monad | ✗ | ✗ | ✓ |
-| TGIC integration | ✗ | ✗ | ✓ |
-| Bell partition analysis | ✗ | ✗ | ✓ |
-| CRG persistence | ✗ | ✗ | ✓ |
-| Tests | 29/29 | 13/13 | 13/13 |
+On close-but-wrong tasks (70-95% cell accuracy):
+- `396d80d7` — 95.31% accuracy via cortex relational rule
+  ("7 with trigger in diagonal NOT cardinal → target")
+- `7acdf6d3` — 94.67% via hex k-NN
+- `ae58858e` — 91.67% via hex k-NN
+- `e509e548` — 86.16% via hex k-NN
 
 ## Architecture
 
 ```
 Task arrives
   ↓
-Lingo Chat — GLM reasons about the task in UBP-Lingo
-  (Reality: observe objects → Information: structure → Activation: learned ops → Potential: constraints)
+┌─────────────────────────────────────────────────────────────────┐
+│ STAGE 1: SENSES (6 sensory modules)                            │
+│                                                                 │
+│  Touch        k-arm + soft neighbourhood matching               │
+│  (geometric_language)                                           │
+│                                                                 │
+│  Sight        colour bridge: 24-bit → RGB332 (256 colours)      │
+│  (colour_space_bridge)                                          │
+│                                                                 │
+│  Proprioception  MOG bit-addressed meaning (576 dims/cell)    │
+│  (mog_meaning_encoder)                                          │
+│                                                                 │
+│  Audition     periodicity/rhythm detection + generation         │
+│  (auditory_sense)                                               │
+│                                                                 │
+│  Smell        long-range Gestalt (4×4 downsampled icon)         │
+│  (smell_taste_sense)                                            │
+│                                                                 │
+│  Taste        local composition (histogram + texture)           │
+│  (smell_taste_sense + taste_generative)                         │
+│                                                                 │
+│  Each sense can GENERATE candidates (not just observe).         │
+└─────────────────────────────────────────────────────────────────┘
   ↓
-ObjectCRG — learn from train pairs (object-to-object transformations)
+┌─────────────────────────────────────────────────────────────────┐
+│ STAGE 2: CORTEX (rule derivation + reasoning)                  │
+│                                                                 │
+│  Cortex v2 (cortex_v2.py)                                       │
+│    - Y as EXTERNAL observer (not internal point)                │
+│    - Y wobble: ~3 bits Hamming (from Y's continued fraction)    │
+│    - Jaccard viewpoint comparison (orthographic vs perspective) │
+│    - Relational rules: "A has T in diagonal NOT cardinal → C"  │
+│                                                                 │
+│  Meta-rule (meta_rule.py)                                       │
+│    - Relational condition + dynamic contextual lookup           │
+│    - Extrapolates to unseen trigger colours                     │
+│                                                                 │
+│  Displacement extrapolation (displacement_extrapolation.py)     │
+│    - Uses NoiseCellV3's elastic_limit from UBP substrate        │
+│    - Predicts target by applying train displacement to unseen   │
+│                                                                 │
+│  Thoughts layer (thoughts_layer.py)                             │
+│    - Writes actual text + numbers as structured Thoughts        │
+│    - 5 thought generators:                                      │
+│      1. Global recolour                                         │
+│      2. Relational trigger                                      │
+│      3. Meta-rule (relational + extrapolation)                  │
+│      4. Arithmetic pattern (add/sub/mul/complement)             │
+│      5. Top-down coherence (output-driven refinement)           │
+│    - Each thought: observation, pattern, hypothesis, prediction,│
+│      confidence, evidence, references                           │
+│    - Selects best thought that passes hard gate                 │
+│                                                                 │
+│  Coherence thought (coherence_thought.py)                       │
+│    - "What target colour makes the output most coherent?"       │
+│    - Scores candidates via: smell, taste, rhythm, NRCI,         │
+│      perfect_distance (from PERFECT_V1 substrate)               │
+│    - Top-down: starts from desired output, works backward       │
+└─────────────────────────────────────────────────────────────────┘
   ↓
-GenerativeTransformer — predict via CRG → Φ-grammar → DSL vocabulary
+┌─────────────────────────────────────────────────────────────────┐
+│ STAGE 3: VERIFICATION (hard gate)                              │
+│                                                                 │
+│  Every candidate must reproduce every train pair EXACTLY.       │
+│  No soft thresholds, no fuzzy matching.                         │
+│  This is the only reliable filter.                              │
+└─────────────────────────────────────────────────────────────────┘
   ↓
-SRCC Cycle — run the monad (T, η, μ) on the predicted output
-  (INPUT → CLOCK → MIRROR → FRICTION → COOLING → SELF-VALIDATION → OUTPUT → RECURSION)
+┌─────────────────────────────────────────────────────────────────┐
+│ STAGE 4: TIEBREAK (Occam's razor + sensory alignment)          │
+│                                                                 │
+│  Source priority (MDL):                                         │
+│    identity < gravity/rotate/flip < shift/crop < recolour      │
+│    < train_map < compose < hex_uniform < hex_colour_map         │
+│    < hex_nearest < taste < analogy/chain/group                  │
+│                                                                 │
+│  Secondary: smell similarity, rhythm match, HDRB signature      │
+└─────────────────────────────────────────────────────────────────┘
   ↓
-Three Column Check — language + math (NRCI) + code (train pass) must align
-  ↓
-Bell Analysis — how many learning methods are available for these objects?
-  ↓
-Dual Output:
-  ├── ARC JSON (accepted submission format)
-  └── Full System Output (Lingo chat + CRG + SRCC + Bell + NRCI + geo_class + calculations)
+┌─────────────────────────────────────────────────────────────────┐
+│ STAGE 5: DIAGNOSIS (full sensory readout)                      │
+│                                                                 │
+│  NRCI, LDP, eml, HDRB signature, colour bridge identity,       │
+│  MOG meaning decoder, auditory rhythm, per-cell coherence       │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## Branch Structure
+## Key concepts
+
+### The 24-bit Leech address
+
+Every ARC cell (row, col, colour, grid_h, grid_w) is encoded into a
+24-bit vector via the UBP `ontological_position_to_vector` pipeline.
+The 24 bits are partitioned into 4 MOG quadrants:
+- **Mirrors** (bits 0-5): colour fingerprint
+- **Information** (bits 6-11): position topology
+- **Activation** (bits 12-17): grid dimensions
+- **Potential** (bits 18-23): coherence pattern
+
+The 24-bit vector IS a hex colour (#RRGGBB). This is the "data IS
+address" principle.
+
+### The Y constant
+
+Y = π/(π²+2) ≈ 0.2647 — the observer constant. It is EXTERNAL to the
+system: the "read" position between us experiencing the results and the
+mechanisms making the results. It is NOT a spatial point inside the
+24-bit address space.
+
+The Y wobble (~3 bits Hamming) comes from Y's continued fraction
+convergent 248/937 (the 7th convergent, accurate to 6 decimal places).
+The wobble is the source of indeterminism — different Y positions give
+slightly different perspective views.
+
+### The 6 senses
+
+| Sense | Module | What it perceives |
+|-------|--------|-------------------|
+| Touch | `geometric_language` | Cell context, 8-neighbour signature, k-arm reach |
+| Sight | `colour_space_bridge` | Hex colour, RGB332, complement, harmony |
+| Proprioception | `mog_meaning_encoder` | Bit-level meaning, 576-dim identity per cell |
+| Audition | `auditory_sense` | Periodicity, rhythm, tiling structure |
+| Smell | `smell_taste_sense` | Long-range Gestalt (4×4 downsampled icon) |
+| Taste | `smell_taste_sense` | Local composition (histogram + texture) |
+
+### The cortex
+
+The cortex derives rules from train pairs and applies them to test. It
+has 6 rule types (tried in order):
+1. **Trigger-mapping**: "A with T in direction D → C"
+2. **Dynamic contextual**: "A next to B → mapping[B]"
+3. **Pattern**: "IF property P THEN transform"
+4. **Orthographic**: global colour mapping (Y's outside view)
+5. **Perspective**: focal vs peripheral (Y's inside view, with wobble)
+6. **Relational**: "A has T in diagonal AND NOT in cardinal → C"
+
+### The thoughts layer
+
+The cortex writes its reasoning as structured `Thought` objects:
+```
+THOUGHT #2
+  Observation: Colour 7 changes to 2 in 2 cells
+  Pattern: Trigger: colour 6 in direction SE
+  Hypothesis: If cell is 7 and has 6 in SE, set to 2
+  Confidence: 1.00
+  Passes train: True
+```
+
+5 thought generators produce competing thoughts; the best one that
+passes the hard gate is selected.
+
+### The top-down coherence thought
+
+Asks: "What target colour makes the output grid most coherent?"
+
+Scores each candidate output using:
+- Smell similarity to train outputs (25%)
+- Taste similarity to train outputs (25%)
+- Rhythm match (20%)
+- NRCI (15%) — peak at 0.75 (manifested range)
+- Perfect distance (15%) — Hamming distance to PERFECT_V1 substrate
+
+Refines bottom-up predictions by trying all 10 colours per uncertain
+cell and picking the most coherent.
+
+## File structure
 
 ```
 arc_agi3/
-├── README.md
-├── run_pipeline_v05.py        ← generative pipeline
-├── dual_submission.py         ← dual-output harness (ARC JSON + full output)
+├── README.md                      ← this file
+├── METHODS_TRIED.md               ← ledger of every method tried
+├── v029_pipeline.py               ← main pipeline (5-stage)
+├── sharpened_pipeline.py          ← v0.20 baseline (DSL + hard gate)
+│
+├── arc_loader/                    ← ARC task loading
+│   └── loader.py                  (Grid, ARCTask, TrainPair, TestInput)
+│
+├── encoder/
+│   └── arc_to_24bit.py            (grid → 24-bit vector)
+│
+├── dsl/
+│   └── arc_dsl_full.py            (162 DSL operators)
+│
 ├── generative/
-│   ├── object_extractor.py    ← grid → objects (words)
-│   ├── object_crg.py          ← learn object transformations
-│   ├── generative_transformer.py ← CRG + Φ-grammar + Three Column
-│   ├── srcc.py                ← Self-Referential Computational Cycle (monad) ← NEW
-│   └── crg_persistence.py     ← save/load CRG across tasks ← NEW
+│   ├── hex_learner.py             ← hex-colour address learning (k-NN + voting)
+│   ├── geometric_language.py      ← direction/Time/rotation primitives + free k-arm
+│   ├── geometric_grammar.py       ← noun/verb/object/action/duration/gate
+│   ├── object_crg_full.py         (ObjectCRG: 30 SpatialRelations, 38 TransformTypes)
+│   ├── generative_transformer_full.py (CRG + Φ-grammar)
+│   ├── prediction_paths.py        (analogy, chain, group prediction)
+│   ├── object_extractor.py        (grid → objects)
+│   ├── per_object_24d.py          (per-object 24D Leech addresses)
+│   ├── srcc.py                    (Self-Referential Computational Cycle)
+│   ├── crg_persistence.py         (save/load CRG)
+│   └── ubp_action_engine.py       (regime-directed generation)
+│
+├── grammar/
+│   ├── phi_grammar_arc_full.py    (full Φ-grammar with conditionals)
+│   ├── smart_candidates.py        (candidate generator using all 162 ops)
+│   └── conditional_candidates.py  (position-dependent detectors)
+│
+├── vendor/                        ← UBP backbone + senses + cortex
+│   ├── ubp_unified_v5.py          ← UBP core (Golay, Leech, MOG, NoiseCellV3)
+│   ├── spatial_arithmetic.py      (R(n), eml, RationalGeometry)
+│   ├── spatial_arithmetic_compat.py (compat layer)
+│   ├── hdrb.py                    ← Hodge-De Rham Bridge (4 pillars)
+│   ├── colour_space_bridge.py     ← 2×4×8×32=2048 Golay-Leech ↔ colour bridge
+│   ├── mog_meaning_encoder.py     ← per-bit 24D meaning (576 dims/cell)
+│   ├── auditory_sense.py          ← periodicity/rhythm (generative)
+│   ├── smell_taste_sense.py       ← smell (Gestalt) + taste (composition)
+│   ├── taste_generative.py        ← taste-driven candidate generation
+│   ├── per_cell_coherence.py      ← per-cell NRCI + coherence delta map
+│   ├── cortex.py                  ← cortex v1 (Y as internal point)
+│   ├── cortex_v2.py               ← cortex v2 (Y external + wobble + relational)
+│   ├── meta_rule.py               ← meta-rule (relational + dynamic lookup)
+│   ├── displacement_extrapolation.py ← NoiseCellV3 elastic_limit extrapolation
+│   ├── thoughts_layer.py          ← structured thoughts (5 generators)
+│   ├── coherence_thought.py       ← top-down coherence (output-driven)
+│   ├── ldp.py                     (Literal Data Physics)
+│   ├── ldp_codec.py               (LDP codec)
+│   ├── tgic_v3.py                 (TGIC engine)
+│   ├── GLM18_hex_colour.py        (24-bit → #RRGGBB)
+│   └── ... (other UBP modules)
+│
 ├── lingo/
-│   ├── lingo_translator.py    ← human ↔ UBP-Lingo translator
-│   └── lingo_chat.py          ← GLM chat reasoning ← NEW
-├── vendor/
-│   ├── tgic_v3.py             ← TGIC engine (aligned) ← NEW
-│   ├── ldp_codec.py           ← LDP codec
-│   ├── ubp_unified_v5.py      ← UBP backbone
-│   ├── refined_nrci.py        ← 5-shell NRCI
-│   ├── spatial_arithmetic.py  ← R(n) primitive
-│   └── ... (7 more GLM/UBP modules)
-├── arc_loader/  encoder/  grammar/  ranker/  dsl/  learner/
-├── tests/  data/  REPORTS/
+│   ├── geometric_translator.py    (Totient Reaction Kinetics translator)
+│   ├── lingo_translator.py        (human ↔ UBP-Lingo)
+│   ├── lingo_chat.py              (GLM chat reasoning)
+│   └── ubp_integration.py         (TopologicalALU, ObserverDynamics)
+│
+├── triadic_verifier.py            (Oracle + Swarm + NoiseCore)
+├── ldp_grid_metrics.py            (LDP mass/tension/zone for grids)
+│
+├── data/
+│   ├── training/                  (50 real ARC-AGI-2 training tasks)
+│   └── crg_state.json             (persisted CRG)
+│
+├── tests/
+│   ├── test_arc_agi3.py
+│   ├── test_arc_agi3_v03.py
+│   ├── test_arc_agi3_v05.py
+│   └── test_arc_agi3_v02.py
+│
+├── REPORTS/
+│   ├── gate1_encoder_validation.md
+│   ├── gate2_grammar_extension.md
+│   └── gate3_ranker_validation.md
+│
+└── scripts/                       (diagnostic scripts, in /home/z/my-project/scripts/)
 ```
 
-## Quick Start
+## Quick start
 
 ```bash
 cd arc_agi3
 
-# Run tests
-python3 tests/test_arc_agi3.py        # v0.1 (7 tests)
-python3 tests/test_arc_agi3_v05.py    # v0.5 (6 tests)
+# Run the v0.29 pipeline on all 50 tasks
+python v029_pipeline.py --batch data/training --verbose
 
-# Run the dual-output submission harness
-python3 dual_submission.py data/training --max-tasks 10
+# Run on a subset
+python v029_pipeline.py --batch data/training --max-tasks 10
 
-# Run the v0.5 generative pipeline
-python3 run_pipeline_v05.py --synthetic
-python3 run_pipeline_v05.py --batch data/training --max-tasks 10
+# Run individual modules (each has a self-test)
+python vendor/cortex_v2.py
+python vendor/thoughts_layer.py
+python vendor/coherence_thought.py
+python vendor/displacement_extrapolation.py
+python vendor/meta_rule.py
+python vendor/auditory_sense.py
+python vendor/smell_taste_sense.py
+python vendor/colour_space_bridge.py
+python vendor/mog_meaning_encoder.py
+python vendor/per_cell_coherence.py
+python vendor/hdrb.py
+python generative/geometric_language.py
+python generative/geometric_grammar.py
+python generative/hex_learner.py
+
+# See the methods tried and their effects
+cat METHODS_TRIED.md
 ```
 
-## Gate Status
+## Version history
 
-| Gate | Status | v0.7 Change |
-|------|--------|-------------|
-| G1 — Encoder | ✓ provisionally closed | LDP geo_class + SRCC NRCI |
-| G2 — Grammar | ✓ CLOSED | SRCC monad drives the grammar cycle |
-| G3 — Ranker | ✗ NOT CLOSED | NRCI is coherence measure (SRCC converges on it) |
-| G4 — DSL | ⏳ 20% on 5-task sample | DSL is "vocabulary"; Lingo is the "language" |
-| G5 — Submission | ⏳ PARTIAL | Dual output produces ARC JSON + full reasoning |
+| Version | Solve rate | Key addition |
+|---------|-----------|-------------|
+| v0.20 | 1/50 (2%) | 162 DSL ops + hard gate (patched for hanging ops) |
+| v0.21 | 1/50 (2%) | HDRB (4 pillars) + hex-colour learning |
+| v0.22 | 1/50 (2%) | Geometric language (direction/Time/rotation) + free k-arm |
+| v0.23 | 2/50 (4%) | Soft neighbourhood matching + NRCI 0.7 coherence gate |
+| v0.24 | 2/50 (4%) | 6 senses + geometric grammar + per-cell coherence |
+| v0.25 | 2/50 (4%) | Cortex v1 (Y as internal observer point) |
+| v0.26 | 2/50 (4%) | Cortex v2 (Y external + wobble + relational rules) |
+| v0.27 | 2/50 (4%) | Meta-rule (relational + dynamic lookup + extrapolation) |
+| v0.28 | 2/50 (4%) | Displacement extrapolation + thoughts layer |
+| v0.29 | 2/50 (4%) | Top-down coherence thought (output-driven refinement) |
 
-## What's Next (v0.8 Roadmap)
+## What works
 
-1. **Per-object CRG prediction** — when the CRG identifies "recolour" but the global mapping fails, generate per-object colour mappings using Bell number partitions to search the method space
-2. **Full 999-task benchmark** — run v0.7 on all 999 ARC training tasks
-3. **CRG accumulation** — run the full benchmark with CRG persistence ON, so the GLM accumulates learning across all 999 tasks
-4. **SRCC deepening** — use the RECURSION component to iteratively refine predictions (currently runs 1-3 iterations; could run more with HomologyJump escapes)
-5. **Lingo chat as input** — let the user describe a transformation in human language, translate to Lingo, and apply
+1. **Hard gate** — exact train-pair reproduction is the only reliable filter
+2. **Per-cell 24-bit Leech address** — the substrate (data IS address)
+3. **Hex-colour k-NN with soft voting** — the "wobble", 70-95% cell accuracy on close tasks
+4. **~20 DSL ops** — gravity, rotate, flip, recolour, shift, crop, tile
+5. **Soft neighbourhood matching** — converted 45737921 from 95.83% to exact
+6. **Relational rules** — "diagonal NOT cardinal" correctly identifies 396d80d7's pattern
+7. **Thoughts layer** — structured, readable reasoning with multiple competing thoughts
+8. **Top-down coherence** — output-driven refinement using all 6 senses
+9. **Occam's razor tiebreak** — source priority by description length
+
+## What doesn't work (yet)
+
+1. **Semantic extrapolation** — predicting the target for an unseen trigger colour
+   when the train mapping doesn't follow an arithmetic or address-proximity pattern
+   (the 1→9 transformation on 396d80d7)
+2. **Y as spatial position** — the perspective view doesn't discriminate because
+   cells are roughly equidistant from Y in 24-bit space. The wobble (3 bits) is
+   too small to create meaningful perspective differences on small grids.
+3. **NRCI as ranker** — coherence ≠ correctness. NRCI measures structural
+   coherence, not whether the transformation is right.
+4. **Most of the 50+ GLM modules** — SRCC, TGIC, Bell partitions, triadic verifier,
+   CRG persistence, lingo chat, geometric translator — contribute zero to solve rate.
+   They add observability without generative power.
+
+## The remaining bottleneck
+
+The system can now:
+- Derive the correct relational rule ("diagonal NOT cardinal") ✓
+- Identify the correct trigger→target mapping from train ✓
+- Write its reasoning as structured text ✓
+- Consider multiple competing thoughts ✓
+- Attempt extrapolation via the UBP substrate ✓
+- Refine predictions top-down using all 6 senses ✓
+
+What it can't do yet:
+- **Semantic extrapolation**: predict 1→9 when train has {6→2, 4→1}.
+  The actual relationship (1→9 = "colour complement" or "10-1") isn't
+  captured by Hamming distance, arithmetic patterns, or displacement curves.
+- **Multi-step thought chains**: thoughts can reference each other (via
+  the `references` field) but don't yet build chains where thought N+1
+  uses thought N's output as input.
+
+## The Y constant's role
+
+Y = π/(π²+2) ≈ 0.2647 is wired in as the external observer with wobble.
+Its mathematical properties (transcendental, low Kolmogorov complexity,
+closest simple function of π to the closed-loop zero) suggest it should
+be a **universal scaling factor**, not a spatial position.
+
+Potential roles not yet explored:
+- **Confidence threshold**: accept extrapolation if confidence > 1-Y ≈ 0.735
+- **Rule prior weight**: weight rules by Y^depth (deeper rules decay)
+- **Perspective foreshortening**: use Y^distance instead of 1/(1+distance)
+
+The Y's "time to shine" likely requires using it as a **decision boundary**
+or **scaling factor**, not as a spatial eye position. This is open for
+further research.
 
 ## License
 
 MIT — same as the parent UBP_Repo.
+
+## Acknowledgements
+
+Built on the UBP framework by E. R. A. Craig (DigitalEuan), using the
+Golay [24,12,8] code, Leech lattice, and the Y = π/(π²+2) observer
+constant. The dimension projection audit (DIMENSION_PROJECTION_REVIEW.md)
+provided essential corrections to the algebraic foundations.
