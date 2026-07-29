@@ -124,29 +124,17 @@ def run_pipeline(task: ARCTask,
     # Stage 2: encode all grids in the task
     task_enc = encode_task(task)
 
-    # Stage 3: generate candidates (v0.4: Φ-grammar + direct candidates)
+    # Stage 3: generate candidates (v0.14: smart + conditional candidates)
     t0 = time.time()
-    from grammar import generate_candidates as gen_phi
-    from grammar import generate_direct_candidates
-    phi_candidates = gen_phi(task, max_program_length=max_program_length)
-    direct_candidates = generate_direct_candidates(task, max_length=max_program_length)
-    # Merge and deduplicate by signature (handle dict params)
-    def _freeze(v):
-        if isinstance(v, dict):
-            return tuple(sorted((k, _freeze(val)) for k, val in v.items()))
-        if isinstance(v, (list, tuple)):
-            return tuple(_freeze(x) for x in v)
-        return v
-    seen_sigs = set()
-    candidates = []
-    for prog in phi_candidates + direct_candidates:
-        sig = tuple((o.op.value, _freeze(o.params)) for o in prog.operations)
-        if sig not in seen_sigs:
-            seen_sigs.add(sig)
-            candidates.append(prog)
+    from grammar.smart_candidates import generate_smart_candidates
+    from grammar.conditional_candidates import generate_conditional_candidates
+    candidates = generate_smart_candidates(task, max_length=max_program_length)
+    conditional_cands = generate_conditional_candidates(task)
+    # Conditional candidates are CustomPrograms, not standard Programs.
+    # They need special handling in the ranker — add them as a separate list.
     gen_time = time.time() - t0
 
-    # Stage 4: rank candidates
+    # Stage 4: rank candidates (v0.14: include conditional candidates)
     t0 = time.time()
     ranker = Ranker()
     results = ranker.rank(task, candidates)
@@ -160,8 +148,31 @@ def run_pipeline(task: ARCTask,
     n_error = sum(1 for r in results if r.verdict == "ERROR")
     n_train_pass = sum(1 for r in results if r.train_pass and r.error is None)
 
+    # v0.14: Check conditional candidates FIRST — they already pass train
+    conditional_outputs: List[Tuple[Any, Grid]] = []
+    for cand in conditional_cands:
+        try:
+            test_output = cand.apply(task.test[0].input)
+            conditional_outputs.append((cand, test_output))
+        except Exception:
+            pass
+
     # Stage 5: top-k
-    top = ranker.top_k(task, candidates, k=top_k)
+    # v0.14: If conditional candidates exist, prefer them (they're train-verified)
+    if conditional_outputs:
+        # Use the first conditional candidate (they're all train-verified)
+        best_cond = conditional_outputs[0]
+        from ranker import RankResult
+        top = [RankResult(
+            program=best_cond[0],
+            train_pass=True,
+            nrci_basic=0.0,
+            nrci_refined=0.0,
+            manifested=False,
+            test_output=best_cond[1],
+        )]
+    else:
+        top = ranker.top_k(task, candidates, k=top_k)
 
     # Ground-truth check
     correct = None

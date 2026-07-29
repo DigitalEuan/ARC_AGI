@@ -65,7 +65,7 @@ def test_rn_integration():
     print("\n── Test 2: R(n) integration in k-parameter ──")
     ok = True
     # Verify that R(n) is being used as the k-parameter
-    from spatial_arithmetic import value_to_radius, radius_to_value
+    from spatial_arithmetic_compat import value_to_radius, radius_to_value
     # spatial_arithmetic.value_to_radius(v) interprets v as a "value" (signed integer)
     # and converts to a polygon vertex count via n = 2*|v| + BASE_NODES (BASE_NODES=4).
     # So value_to_radius(4) computes R(2*4+4) = R(12) ≈ 1/(2·sin(π/12)) ≈ 1.93
