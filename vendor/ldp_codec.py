@@ -1,15 +1,27 @@
 """
-ldp_codec — Batch Compression via Geometric Headers
-=====================================================
-A drop-in compression library using the Literal Data Physics framework.
+"""
+================================================================================
+UBP ldp_codec — Geometric Batch Grouping Analysis
+================================================================================
+Author  : E R A Craig, New Zealand
+Version : 0.2
+Date    : 28 July 2026
 
-Integers are grouped by their geometric class (a 10-bit structural fingerprint).
-Each group shares one header; members need only their index within the group.
+THE CONCEPT
+=========
+Getting more data-per-bit than encoded and using the additional meta-data for computational use.
+===============================================
+A deterministic analysis/grouping library for integer batches.
+
+Integers are grouped by a lossy 10-bit structural fingerprint.  The fingerprint
+is not an invertible encoding: exact members still have to be stored.  Therefore
+this module does **not** claim compression from class headers alone.  Its size
+figures include each integer's range code plus the class headers.
 
 Usage:
     from ldp_codec import compress, decompress
 
-    # Compress a batch of integers
+    # Group and analyze a batch of integers
     data = [7, 13, 42, 100, 169, 500, 997]
     compressed = compress(data)
     print(compressed.summary())
@@ -18,11 +30,14 @@ Usage:
     recovered = decompress(compressed)
     assert recovered == data
 
-    # Get compression stats
-    print(f"Saved {compressed.savings_pct:.1f}%")
+    # Get storage-overhead stats (negative savings means overhead)
+    print(f"Savings estimate: {compressed.savings_pct:.1f}%")
     print(f"Bits/int: {compressed.bits_per_int:.2f} (vs {compressed.raw_bits_per_int:.2f} raw)")
 
 No dependencies. Python 3.8+.
+
+================================================================================
+"""
 """
 
 import math
@@ -94,14 +109,18 @@ GEO_CLASS_BITS = 10  # total bits for geometric class
 
 @dataclass
 class CompressedBatch:
-    """The result of compressing a batch of integers.
+    """A grouped batch with honest standalone-storage estimates.
+
+    The historical class name is retained for API compatibility.  ``integers``
+    and ``groups`` contain exact members; a geometric class alone cannot recover
+    them.
     
     Attributes:
         integers: the original integers (for verification)
         groups: dict mapping geo_class → sorted list of integers
         n_integers: count of integers
         n_groups: count of unique geometric classes
-        total_bits: total compressed size in bits
+        total_bits: standalone estimate including exact values and headers
         bits_per_int: average bits per integer
         raw_bits_per_int: raw encoding bits per integer
         savings_pct: percentage saved vs raw
@@ -117,10 +136,11 @@ class CompressedBatch:
     
     def summary(self) -> str:
         return (
-            f"CompressedBatch: {self.n_integers} integers → "
+            f"GroupedBatch: {self.n_integers} integers → "
             f"{self.n_groups} groups, "
-            f"{self.bits_per_int:.2f} bits/int "
-            f"(saves {self.savings_pct:.1f}% vs raw {self.raw_bits_per_int:.2f} bits/int)"
+            f"{self.bits_per_int:.2f} estimated bits/int "
+            f"({self.savings_pct:.1f}% savings vs raw {self.raw_bits_per_int:.2f}; "
+            "negative means metadata overhead)"
         )
     
     def header_info(self) -> List[Dict[str, Any]]:
@@ -137,13 +157,17 @@ class CompressedBatch:
                 "is_prime": bool(is_p),
                 "n_members": len(members),
                 "idx_bits": idx_bits,
-                "total_bits": GEO_CLASS_BITS + len(members) * idx_bits,
+                "index_only_bits": GEO_CLASS_BITS + len(members) * idx_bits,
                 "members": members,
             })
         return result
     
     def to_dict(self) -> Dict[str, Any]:
-        """Serialize to a JSON-compatible dict."""
+        """Serialize summary data to a JSON-compatible dict.
+
+        Tuple keys are rendered for display; use a purpose-built wire format if
+        this dictionary itself must later be decoded.
+        """
         return {
             "n_integers": self.n_integers,
             "n_groups": self.n_groups,
@@ -162,22 +186,29 @@ class CompressedBatch:
 
 def compress(integers: List[int], N_range: Tuple[int, int] = (3, 1000)) -> CompressedBatch:
     """
-    Compress a batch of integers using shared geometric headers.
-    
-    Groups integers by geometric class (10-bit header). Each group shares
-    one header; members need only their index within the group.
+    Group a batch and estimate standalone storage with geometric headers.
+
+    Each group shares a 10-bit descriptive header, but exact integer range
+    codes are still counted because the fingerprint is many-to-one.
     
     Args:
         integers: list of integers to compress
         N_range: the expected range (for computing raw bits)
     
     Returns:
-        CompressedBatch with compression statistics
+        API-compatible CompressedBatch with grouping/storage statistics
     """
     lo, hi = N_range
-    raw_bits = math.log2(hi - lo + 1)
-    
-    # Group by geometric class
+    if lo > hi:
+        raise ValueError("N_range lower bound must not exceed upper bound")
+    if any(isinstance(n, bool) or not isinstance(n, int) for n in integers):
+        raise TypeError("integers must contain only int values")
+    if any(n < lo or n > hi for n in integers):
+        raise ValueError("every integer must lie within N_range")
+    raw_bits = max(1, math.ceil(math.log2(hi - lo + 1)))
+
+    # Group by geometric class.  Exact values remain necessary because many
+    # integers share each class.
     groups = defaultdict(list)
     for n in integers:
         groups[geo_class(n)].append(n)
@@ -186,12 +217,11 @@ def compress(integers: List[int], N_range: Tuple[int, int] = (3, 1000)) -> Compr
     for gc in groups:
         groups[gc].sort()
     
-    # Compute total bits
-    total_bits = 0
-    for gc, members in groups.items():
-        header = GEO_CLASS_BITS
-        idx_bits = math.ceil(math.log2(max(len(members), 1)))
-        total_bits += header + len(members) * idx_bits
+    # Honest standalone estimate: each exact range code plus one class header.
+    # The previous implementation counted only an index into an unstored
+    # codebook, then retained the original integers in memory; that was not a
+    # decodable compressed representation.
+    total_bits = len(integers) * raw_bits + len(groups) * GEO_CLASS_BITS
     
     n_integers = len(integers)
     bits_per_int = total_bits / n_integers if n_integers > 0 else 0
@@ -210,10 +240,10 @@ def compress(integers: List[int], N_range: Tuple[int, int] = (3, 1000)) -> Compr
 
 def decompress(batch: CompressedBatch) -> List[int]:
     """
-    Decompress a CompressedBatch back to the original integers.
-    
-    Since the compression is lossless (each integer maps to a unique
-    geo_class + index), this recovers the exact original list.
+    Recover the sorted exact members retained in a CompressedBatch.
+
+    This is lossless because the batch stores the members, not because the
+    geometric fingerprint is invertible.
     
     Args:
         batch: a CompressedBatch from compress()
@@ -231,7 +261,7 @@ def decompress(batch: CompressedBatch) -> List[int]:
 
 def compress_ordered(integers: List[int], N_range: Tuple[int, int] = (3, 1000)) -> Tuple[CompressedBatch, List[int]]:
     """
-    Compress preserving original order.
+    Group while recording enough references to preserve original order.
     
     Returns:
         (CompressedBatch, order_indices) where order_indices records
@@ -290,7 +320,7 @@ def analyze_distribution(integers: List[int]) -> Dict[str, Any]:
     }
 
 def estimate_savings(n_integers: int, N_range: Tuple[int, int] = (3, 1000)) -> float:
-    """Estimate compression savings for a random batch of given size."""
+    """Estimate storage savings (normally metadata overhead) for a sample."""
     import random
     random.seed(42)
     lo, hi = N_range
@@ -303,11 +333,11 @@ def estimate_savings(n_integers: int, N_range: Tuple[int, int] = (3, 1000)) -> f
 # ==============================================================================
 
 def _demo():
-    """Demonstrate the compression library."""
+    """Demonstrate the grouping-analysis library."""
     import random
     
     print("=" * 60)
-    print(" ldp_codec — Batch Compression via Geometric Headers")
+    print(" ldp_codec — Geometric Batch Grouping Analysis")
     print("=" * 60)
     
     # Example 1: Small batch
@@ -328,7 +358,7 @@ def _demo():
     print(f"  Order preserved: {data == recovered_ordered}")
     
     # Example 3: Various batch sizes
-    print("\n[3] Compression by batch size:")
+    print("\n[3] Standalone storage estimate by batch size:")
     random.seed(42)
     ns = list(range(3, 1001))
     print(f"  {'Size':>6} {'Groups':>7} {'Bits/int':>9} {'Raw':>7} {'Savings':>8}")
@@ -353,7 +383,7 @@ def _demo():
     primes = [n for n in range(3, 201) if _is_prime(n)]
     comp = compress(primes)
     print(f"  {comp.summary()}")
-    print(f"  All primes share same geo_class header → maximum compression")
+    print("  All primes share one descriptive class; exact values are still stored")
     
     # Example 6: Header info
     print("\n[6] Header info (first 5 groups):")
@@ -361,8 +391,8 @@ def _demo():
     for info in comp.header_info()[:5]:
         gc = info['geo_class']
         print(f"  Class {gc}: {info['n_members']} members, "
-              f"{info['idx_bits']} idx bits, {info['total_bits']} total bits")
-    
+              f"{info['idx_bits']} idx bits, {info['index_only_bits']} index-only bits")
+
     print("\n" + "=" * 60)
     print(" Usage:")
     print("   from ldp_codec import compress, decompress")

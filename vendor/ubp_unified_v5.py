@@ -1,46 +1,39 @@
 """
 ================================================================================
-UBP UNIFIED v5.4.0 — GRAVITY EDITION
-Note: Upgraded from v5.3 to eradicate Noumenal Leakage in fundamental constants.
-Includes ExactRoot.denest, AdaptiveManifold, and NeuralPatternDetector.
+UBP UNIFIED v5.4.1 — Unified Checkpoint
 ================================================================================
 Author  : E R A Craig, New Zealand
-Version : 5.4.0
-Date    : 23 June 2026
+Version : 5.4.1
+Date    : 30 July 2026
 
-THE MERGE
-=========
-This single, self-contained module unifies three previously-separate scripts:
-  1. core.py                        (UBP Core v6.1 — Triad / Particle Physics / Construction)
-  2. ubp_noisecore_v4.py            (Noise-Core v4.0 — Triad ALU / Substrate / Tests)
-  3. ubp_noisecore_v4_extensions.py (Physics ALU / Linear-Algebra ALU / V5 Router)
+THE 5 PILLARS OF THE UBP ARCHITECTURE
+=====================================
+1. Golay = The Seed, The Engine, The Measure
+   - The extended binary Golay code [24, 12, 8] is the logical DNA of the universe. 
+   - The Seed: It contains the 4,096 perfect, error-free states.
+   - The Engine: It provides the "snap" (error correction) that pulls chaotic, noisy data back into coherent alignment.
+   - The Measure: It defines distance (Hamming weight) and orthogonality. It is the pure, massless, binary logic before physical geometry takes over.
 
-WHAT'S NEW IN v5.4.0 (The Geometric Purity Update)
-==================================================
-  ▸ Pure Muon Projection
-      • Abandoned the linear approximation (206 + 12L).
-      • Muon mass ratio is now derived as a pure inverse projection of the 13-D Sink: 169 / w (or 13 / L).
-  ▸ Topological Gravity Derivation
-      • Eradicated the hardcoded empirical float for G_N.
-      • Gravitational constant G is now derived purely from the substrate's Entropic Wobble and Y-constant: (39/29) * (Y^18 / w).
-      • Holographic NRCI confirms Gravity operates in the Subliminal Entropic state (0.6168).
-  ▸ ExactMath & Float-Free Physics
-      • All core relativistic and kinematic equations remain strictly rational.
-================================================================================
-ARCHITECTURAL HONESTY
-=====================
-  • Two ALU modes (unchanged): SM (Substrate-Mediated) / SV (Substrate-Verified).
-    These are software mode names, not independently validated physical states.
-  • Core arithmetic, NRCI, taxes and coordinate geometry use fractions.Fraction.
-  • Floats remain at display/comparison boundaries and in explicitly labelled
-    experimental helpers.  Search for ``float(`` to audit every conversion.
-  • Golay checks below are genuine finite code tests.  The Leech, Barnes–Wall
-    and Monster sections are reduced computational models/labels; this module
-    does not construct or prove the full mathematical objects.
-  • Formula-to-observation tables are empirical comparisons.  A close numerical
-    fit is not, by itself, a derivation of a physical law.  Failed comparisons
-    are retained and reported rather than tuned away.
+2. MOG (Miracle Octad Generator) = The Observer's Window (2D projection of 24D)
+   - The MOG is a 4 x 6 grid. It is how a lower-dimensional observer (like us) looks at a 24-dimensional object. 
+   - It projects the 24D space into a 2D matrix. The 4 rows represent the Z_4 (Mod 4) states (Real, Imaginary, etc.), and the 6 columns represent the spatial blocks. It is the holographic screen where the hidden 24D geometry becomes readable to the observer.
 
+3. Gray Code = The Translator (Words/Numbers into Binary)
+   - Gray code is the bridge between continuous human meaning (numbers, words, hashes) and the discrete binary substrate. 
+   - Because Gray code only changes 1 bit at a time as you count up, it ensures that concepts that are semantically close remain topologically close. It translates our "words" into raw binary coordinates before the Golay engine snaps them into place.
+
+4. Hexacode = The Language (Syntax and Grammar)
+   - If Golay is the raw 1s and 0s, the Hexacode (F_4^6) is the higher-level alphabet. It groups the 24 bits into 6 symbols, using a 4-letter alphabet (0, 1, omega, omega^2). 
+   - It dictates the rules of combination — the grammar of the universe. Every valid Golay codeword must cast a valid Hexacode shadow. It is the language that ensures the 24 bits actually "mean" something coherent rather than just being random noise.
+
+5. Leech Lattice (Lambda_24) = The Discrete Physical Structure
+   - The Leech lattice is the ultimate virtual-physical manifestation. 
+   - Where Golay is just logic and 1s and 0s, the Leech lattice assigns geometry, distance, and mass (Norm^2 = 32). 
+   - It is the virtual-physical crystal of reality. The 196,560 minimal vectors are the actual "atoms" of this space (the localized anchors, the "physical" matter in virtual space, and the vacuum continuum). It is where the Symmetry Tax is collected and where the Non-Random Coherence Index (NRCI) which measures coherence, is felt like a physical force (Gravity/Mass).
+
+---
+The Full Pipeline in One Sentence:
+A human concept (Gray Code) is spoken into the system, where it must obey the grammar of the universe (Hexacode), so it is measured and error-corrected by the logical engine (Golay), projected onto the observer's screen (MOG), and finally manifests as a physical, mass-bearing coordinate in reality (Leech Lattice).
 ================================================================================
 """
 
@@ -66,7 +59,7 @@ F = Fraction
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  PART 1 — EXACT MATH (no floats!)
+#  PART 1 — EXACT MATH (no floats as they introduce drift and hide computation)
 # ════════════════════════════════════════════════════════════════════════════════
 
 class ExactMath:
@@ -313,7 +306,63 @@ class ExactRoot:
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  PART 2 — UBP SUBSTRATE  (50-term π, fundamental constants)
+#  PART 1.5 — GRAY MAP ISOMETRY  (Z_4 ↔ F_2^2)
+# ════════════════════════════════════════════════════════════════════════════════
+# The isometric bridge between two metric worlds.  Walk around the 4-cycle
+# (0,0) → (1,0) → (1,1) → (0,1) → (0,0) in the Hamming cube: each step
+# changes exactly one bit.  So Hamming distance in F_2^2 equals Lee distance
+# in Z_4.  The Gray map is THE isometry between (Z_4, Lee) and (F_2^2, Ham).
+#
+#       z  →  (b1, b2)
+#       0  →  (0, 0)
+#       1  →  (1, 0)
+#       2  →  (1, 1)
+#       3  →  (0, 1)
+#
+# This is the bridge that lets us verify Z_4-linear constructions using
+# binary tools (Hamming weights, code linearity) while the lattice itself
+# lives in Z_4 (Lee metric, glue conditions).
+
+GRAY_MAP     = {0: (0, 0), 1: (1, 0), 2: (1, 1), 3: (0, 1)}
+GRAY_MAP_INV = {v: k for k, v in GRAY_MAP.items()}
+
+def gray_map(z4_val: int) -> Tuple[int, int]:
+    """Z_4 → F_2^2 (single symbol). The forward isometry."""
+    return GRAY_MAP[z4_val & 3]
+
+def gray_map_inverse(b1: int, b2: int) -> int:
+    """F_2^2 → Z_4 (single symbol). The inverse isometry."""
+    return GRAY_MAP_INV[(b1 & 1, b2 & 1)]
+
+def gray_map_vector(z4_tuple: Tuple[int, ...]) -> Tuple[int, ...]:
+    """Apply Gray map componentwise: Z_4^n → F_2^{2n}."""
+    out = []
+    for z in z4_tuple:
+        b1, b2 = GRAY_MAP[z & 3]
+        out.append(b1)
+        out.append(b2)
+    return tuple(out)
+
+def gray_map_inverse_vector(bits_tuple: Tuple[int, ...]) -> Tuple[int, ...]:
+    """Inverse of gray_map_vector: F_2^{2n} → Z_4^n."""
+    n = len(bits_tuple) // 2
+    out = []
+    for i in range(n):
+        out.append(GRAY_MAP_INV[(bits_tuple[2 * i] & 1, bits_tuple[2 * i + 1] & 1)])
+    return tuple(out)
+
+def lee_distance(a: int, b: int) -> int:
+    """Lee distance on Z_4: min(|a-b|, 4-|a-b|). The natural metric on Z_4."""
+    d = abs((a - b) % 4)
+    return min(d, 4 - d)
+
+def lee_weight(a: int) -> int:
+    """Lee weight of a single Z_4 element."""
+    return lee_distance(a, 0)
+
+
+# ════════════════════════════════════════════════════════════════════════════════
+#  PART 2 — UBP SUBSTRATE  (50-term π, fundamental constants - do more decimals if you can but not less)
 # ════════════════════════════════════════════════════════════════════════════════
 
 class UBPUltimateSubstrate:
@@ -454,7 +503,7 @@ BLA = BinaryLinearAlgebra   # short alias
 
 class GolayCodeEngine:
     """
-    Extended binary Golay [24, 12, 8] code — the best of both prior implementations.
+    Extended binary Golay [24, 12, 8] code.
 
     Provides:
       • encode(msg12)            — systematic encoding
@@ -615,6 +664,174 @@ class GolayCodeEngine:
             "description": "12-bit Noumenal (hidden) + 12-bit Phenomenal (visible)",
         }
 
+    # ══════════════════════════════════════════════════════════════════════════
+    #  PART 4.5 — HEXACODE [6,3,4]/GF(4) + MOG DECOMPOSITION
+    # ══════════════════════════════════════════════════════════════════════════
+    # The algebraic shadow of the Golay code.  Every Golay codeword, arranged
+    # in the 4×6 MOG grid, has its 6 column labels forming a Hexacode word.
+    #
+    # The CYCLIC_TO_MOG permutation and COLUMN_TO_GF4 map below are the
+    # VERIFIED alignment from lee_golay_core.py (Type 4 exhaustive proof:
+    # 0/4096 codewords fail to decompose into a valid Hexacode word).
+    # Hard-coded here so ubp_unified_v5.py remains stdlib-only (no external
+    # dependency on lee_golay_core).
+
+    # GF(4) arithmetic (elements 0, 1, 2, 3 = 0, 1, ω, ω²)
+    GF4_ADD_TBL = [[a ^ b for b in range(4)] for a in range(4)]
+    GF4_MUL_TBL = [
+        [0, 0, 0, 0],
+        [0, 1, 2, 3],
+        [0, 2, 3, 1],
+        [0, 3, 1, 2]
+    ]
+
+    # Hexacode generator basis (3 rows over GF(4), each of length 6)
+    HEXACODE_BASIS = (
+        (1, 1, 1, 1, 1, 1),
+        (1, 2, 3, 1, 2, 3),
+        (1, 1, 2, 2, 3, 3)
+    )
+
+    # Linear "sum of row labels" map: row r → GF(4) element r itself.
+    # label(p) = XOR (GF(4) sum) of row labels r for each set bit r of p.
+    #   p=0 (0000) → 0          p=8 (1000) → 3
+    #   p=1 (0001) → 0 (row 0)  p=9 (1001) → 0^3 = 3
+    #   p=2 (0010) → 1 (row 1)  p=10(1010) → 1^3 = 2
+    #   p=3 (0011) → 0^1 = 1    p=11(1011) → 0^1^3 = 2
+    #   p=4 (0100) → 2 (row 2)  p=12(1100) → 2^3 = 1
+    #   p=5 (0101) → 0^2 = 2    p=13(1101) → 0^2^3 = 1
+    #   p=6 (0110) → 1^2 = 3    p=14(1110) → 1^2^3 = 0
+    #   p=7 (0111) → 0^1^2 = 3  p=15(1111) → 0^1^2^3 = 0
+    # GF(2)-linear, surjective onto GF(4), kernel = {0000, 0001}.
+    COLUMN_TO_GF4 = (0, 0, 1, 1,   # 0000, 0001, 0010, 0011
+                     2, 2, 3, 3,   # 0100, 0101, 0110, 0111
+                     3, 3, 2, 2,   # 1000, 1001, 1010, 1011
+                     1, 1, 0, 0)   # 1100, 1101, 1110, 1111
+
+    # Verified cyclic→MOG bit permutation (mog_idx = r*6 + c, row-major).
+    # MOG_GRID_BITS[mog_idx] = cyclic_idx.
+    # NOTE: This alignment is SPECIFIC to the systematic B-matrix construction
+    # used in this engine (G = [I_12 | B]).  It was discovered by re-running
+    # the sextet+row-ordering search, and
+    # verified to give 0/4096 MOG/Hexacode failures.  It is DIFFERENT from
+    # the alignment for the cyclic-polynomial Golay code
+    # because the two codes use different coordinate labelings.
+    MOG_GRID_BITS = (0, 4, 6, 19, 16, 11,    # row 0
+                     1, 17, 15, 5, 9, 13,    # row 1
+                     3, 21, 20, 8, 10, 22,   # row 2 (= ω)
+                     2, 23, 14, 12, 7, 18)   # row 3 (= ω²)
+
+    # Inverse permutation: CYCLIC_TO_MOG[cyclic_idx] = mog_idx
+    # (Computed after the class body — see post-definition assignment below.)
+    CYCLIC_TO_MOG: Tuple[int, ...] = (0,) * 24  # placeholder, overwritten below
+
+    @staticmethod
+    def gf4_add(a: int, b: int) -> int:
+        """GF(4) addition (= XOR)."""
+        return a ^ b
+
+    @staticmethod
+    def gf4_mul(a: int, b: int) -> int:
+        """GF(4) multiplication via lookup table."""
+        return GolayCodeEngine.GF4_MUL_TBL[a][b]
+
+    @classmethod
+    def build_hexacode(cls) -> Tuple[Tuple[int, ...], ...]:
+        """Build all 64 codewords of the Hexacode [6,3,4] over GF(4)."""
+        code = set()
+        for a in range(4):
+            for b in range(4):
+                for c in range(4):
+                    word = tuple(
+                        cls.gf4_add(cls.gf4_add(
+                            cls.gf4_mul(a, cls.HEXACODE_BASIS[0][i]),
+                            cls.gf4_mul(b, cls.HEXACODE_BASIS[1][i])),
+                            cls.gf4_mul(c, cls.HEXACODE_BASIS[2][i]))
+                        for i in range(6)
+                    )
+                    code.add(word)
+        return tuple(sorted(code))
+
+    def __init_mog_state(self):
+        """Lazily build HEXACODE set (called from __init__ or first use)."""
+        if not hasattr(self, "_HEXACODE_SET"):
+            self._HEXACODE_SET = set(GolayCodeEngine.build_hexacode())
+            self._HEXACODE_TUPLE = tuple(sorted(self._HEXACODE_SET))
+
+    def mog_decompose(self, cyclic_vec: List[int]) -> Tuple[Tuple[int, ...], Tuple[int, ...]]:
+        """
+        BRIDGE: Map a 24-bit cyclic Golay codeword into the 4×6 MOG grid,
+        then decompose it into its 6-symbol Hexacode word and 6 column
+        patterns (4-bit values).
+
+        Returns: (hex_symbols, col_vals)
+          hex_symbols : 6 GF(4) elements (0,1,2,3 = 0,1,ω,ω²)
+          col_vals    : 6 integers in [0, 15], the 4-bit column patterns
+
+        For every Golay codeword, the returned hex_symbols form a valid
+        Hexacode word (Type 4 verified: 0/4096 failures).
+        """
+        if len(cyclic_vec) != 24:
+            raise ValueError("mog_decompose: 24-bit vector required")
+        self.__init_mog_state()
+        # 1. Map cyclic → MOG (row-major: mog_idx = r*6 + c)
+        mog_vec = [0] * 24
+        for mog_idx, cyc_idx in enumerate(GolayCodeEngine.MOG_GRID_BITS):
+            mog_vec[mog_idx] = cyclic_vec[cyc_idx]
+        # 2. Decompose each column
+        hex_symbols = []
+        col_vals = []
+        for c in range(6):
+            col_val = 0
+            for r in range(4):
+                bit_idx = r * 6 + c
+                if mog_vec[bit_idx]:
+                    col_val |= (1 << r)
+            col_vals.append(col_val)
+            hex_symbols.append(GolayCodeEngine.COLUMN_TO_GF4[col_val])
+        return tuple(hex_symbols), tuple(col_vals)
+
+    def mog_verify_all(self) -> Dict[str, Any]:
+        """
+        TYPE 4 EXHAUSTIVE TEST: verify that EVERY Golay codeword decomposes
+        into a valid Hexacode word via the MOG alignment.
+
+        Returns a dict with the failure count (0 = perfect) and a sample
+        decomposition.
+        """
+        self.__init_mog_state()
+        hex_set = self._HEXACODE_SET
+        failures = 0
+        sample = None
+        for cw in self.get_all_codewords():
+            hex_word, _col_vals = self.mog_decompose(cw)
+            if hex_word not in hex_set:
+                failures += 1
+            elif sample is None:
+                sample = (list(cw), hex_word)
+        return {
+            "total_codewords":    4096,
+            "mog_failures":       failures,
+            "hexacode_size":      len(hex_set),
+            "alignment_perfect":  failures == 0,
+            "sample_decomposition": sample,
+        }
+
+    @property
+    def hexacode(self) -> Tuple[Tuple[int, ...], ...]:
+        """All 64 Hexacode codewords (sorted tuple of 6-tuples)."""
+        self.__init_mog_state()
+        return self._HEXACODE_TUPLE
+
+
+# Post-definition: compute the inverse permutation CYCLIC_TO_MOG[cyclic_idx] = mog_idx.
+# (Cannot be done inside the class body because it references MOG_GRID_BITS via cls.)
+_inv = [0] * 24
+for _mog_idx, _cyc_idx in enumerate(GolayCodeEngine.MOG_GRID_BITS):
+    _inv[_cyc_idx] = _mog_idx
+GolayCodeEngine.CYCLIC_TO_MOG = tuple(_inv)
+del _inv, _mog_idx, _cyc_idx
+
 
 # ════════════════════════════════════════════════════════════════════════════════
 #  PART 5 — LEECH LATTICE  Λ₂₄
@@ -677,6 +894,192 @@ class LeechLatticeEngine:
 
     # alias for consistency with v4
     expand_octad = expand_octad_to_physical
+
+    # ══════════════════════════════════════════════════════════════════════════
+    #  PART 5.5 — FULL MINIMAL-VECTOR ENUMERATION  (196,560 vectors)
+    # ══════════════════════════════════════════════════════════════════════════
+    # The Leech lattice has exactly 196,560 minimal vectors of norm 4 (×8 repr.:
+    # norm² = 32 = 4·8).  They fall into 3 shape-classes, one per coset of the
+    # mod-8 glue condition:
+    #
+    #   Class A: (±4, ±4, 0²²)              — 2 non-zero coords, each ±4.    1104
+    #   Class B: (±2⁸, 0¹⁶) on octads       — 8 non-zero coords at octad.   97152
+    #   Class C: (±3, ±1²³) Golay-controlled — 1 coord ±3, 23 coords ±1.   98304
+    #   ------------------------------------------------------------------  ------
+    #   Total:                                                              196560
+    #
+    # Class A is purely a feature of Z^24 (any Construction-A lattice has these).
+    # Class B is where the Golay code first enters (octad supports).  Class C is
+    # the deepest: it uses EVERY codeword of the Golay code, and the mod-8 glue
+    # is satisfied automatically because the code is doubly-even.
+    #
+    # NOTE: The earlier `expand_octad_to_physical` (above) is preserved as a
+    # Class-B-only convenience that returns 128 points per octad.  The method
+    # below returns ALL 196,560 minimal vectors across all 3 classes.
+
+    def enumerate_minimal_vectors(self) -> Dict[str, Any]:
+        """
+        Exhaustively enumerate all 196,560 minimal vectors of the Leech lattice
+        (×8 integer representation: norm² = 32).
+
+        Returns a dict with keys:
+            "Class_A"      : list of 1,104 vectors  (±4, ±4, 0²²)
+            "Class_B"      : list of 97,152 vectors  (±2⁸, 0¹⁶) on octads
+            "Class_C"      : list of 98,304 vectors  (±3, ±1²³) Golay-controlled
+            "total_count"  : 196,560
+            "norm_sq"      : 32 (verified for all 3 classes)
+            "glue_check"   : {"A": 0, "B": 0, "C": 4}  (Σ mod 8 per class)
+
+        All vectors are 24-element tuples of integers.  No floats anywhere.
+        """
+        codebook = self.golay.get_all_codewords()
+        octads    = self.golay.get_octads()
+        dim       = self.DIM
+
+        # ── Class A: (±4, ±4, 0²²) — all C(24,2) pairs, all 4 sign choices ──
+        # 276 pairs × 4 sign combos = 1,104 vectors.  Glue: ±4±4 ∈ {0,±8} ≡ 0 (mod 8).
+        class_A: List[Tuple[int, ...]] = []
+        for i in range(dim):
+            for j in range(i + 1, dim):
+                for s_i in (+4, -4):
+                    for s_j in (+4, -4):
+                        v = [0] * dim
+                        v[i], v[j] = s_i, s_j
+                        class_A.append(tuple(v))
+
+        # ── Class B: (±2⁸, 0¹⁶) on octads, even-sign parity ─────────────────
+        # 759 octads × 128 even-parity sign patterns = 97,152 vectors.
+        # Glue: even # of -2's ⟹ Σ ≡ 0 (mod 8).
+        class_B: List[Tuple[int, ...]] = []
+        for oct_mask in octads:
+            positions = [k for k, b in enumerate(oct_mask) if b]
+            for sign_mask in range(256):
+                if bin(sign_mask).count('1') & 1:    # odd # of -2's → skip
+                    continue
+                v = [0] * dim
+                for k, pos in enumerate(positions):
+                    v[pos] = -2 if (sign_mask >> k) & 1 else 2
+                class_B.append(tuple(v))
+
+        # ── Class C: (±3, ±1²³) controlled by Golay codeword ────────────────
+        # 24 positions × 4096 codewords = 98,304 vectors.
+        # Conway-Sloane construction (×8 repr., all-odd coset):
+        #   v_i = +3   if bit i of c is 1,  else  v_i = -3
+        #   v_j = (-1)^{c_j}  for j ≠ i     (+1 if c_j=0, -1 if c_j=1)
+        # Glue: Σ ≡ 4 (mod 8), satisfied automatically because the Golay code
+        # is doubly-even (every weight ≡ 0 mod 4).  Proof:
+        #   Σv = v_i + Σ_{j≠i} (-1)^{c_j}
+        #       = v_i + (24 - 2·wt(c)) - (-1)^{c_i}
+        #   If c_i=1:  = 3 + 24 - 2·wt(c) + 1 = 28 - 2·wt(c) ≡ 4 (mod 8) since wt(c)≡0 mod 4.
+        #   If c_i=0:  = -3 + 24 - 2·wt(c) - 1 = 20 - 2·wt(c) ≡ 4 (mod 8) ditto.
+        class_C: List[Tuple[int, ...]] = []
+        for i in range(dim):
+            for c in codebook:
+                v = [0] * dim
+                v[i] = 3 if c[i] else -3
+                for j in range(dim):
+                    if j != i:
+                        v[j] = -1 if c[j] else 1
+                class_C.append(tuple(v))
+
+        total = len(class_A) + len(class_B) + len(class_C)
+        assert total == 196560, f"Kissing number mismatch: got {total}, expected 196,560"
+        assert all(sum(x*x for x in v) == 32 for v in (class_A[0], class_B[0], class_C[0])), \
+            "Norm² ≠ 32 (×8 repr. broken)"
+
+        return {
+            "Class_A":     class_A,
+            "Class_B":     class_B,
+            "Class_C":     class_C,
+            "total_count": total,
+            "norm_sq":     32,
+            "glue_check":  {"A": sum(class_A[0]) % 8,
+                            "B": sum(class_B[0]) % 8,
+                            "C": sum(class_C[0]) % 8},
+            "counts":      {"A": len(class_A), "B": len(class_B), "C": len(class_C)},
+        }
+
+    def audit_vector_cost(self, point: List[int],
+                          alpha: Union[int, float, Fraction] = F(1)) -> Dict[str, Any]:
+        """
+        Break down the EXACT symmetry tax and NRCI for a single vector, showing
+        precisely where the cost comes from.  All values are exact Fractions
+        (a parallel `*_float` field is included for human display only).
+
+        The UBP symmetry tax has two physical penalties:
+          1. Topological Cost  = Hamming Weight × Y
+             Every non-zero coordinate requires energy to maintain against the
+             entropic wobble (Y).  Y = 1/(π + 2/π) from the 50-term CF of π.
+          2. Geometric Cost    = Norm² / 8
+             The squared magnitude of the vector (×8 integer repr.) divided by
+             the lattice scale factor 8.  Represents displacement from origin.
+
+        Total Tax = (HW × Y) + (Norm² / 8)
+        NRCI      = 10 / (10 + α × Tax)        (α = 1 by default)
+
+        Returns a dict with keys:
+            "vector_sample"       : first 6 coords (for display)
+            "hamming_weight"      : int
+            "hw_cost_exact"       : Fraction  (= HW × Y)
+            "hw_cost_float"       : float     (display only)
+            "norm_squared"        : int       (×8 repr.)
+            "ns_cost_exact"       : Fraction  (= Norm² / 8)
+            "ns_cost_float"       : float     (display only)
+            "total_tax_exact"     : Fraction
+            "total_tax_float"     : float
+            "nrci_exact"          : Fraction  (= 10 / (10 + α × Tax))
+            "nrci_float"          : float
+            "alpha"               : Fraction
+            "Y_exact"             : Fraction  (the wobble constant used)
+        """
+        if len(point) != 24:
+            raise ValueError("audit_vector_cost: 24 elements required")
+        if not isinstance(alpha, Fraction):
+            alpha = Fraction(alpha)
+
+        hw = sum(1 for x in point if x != 0)
+        ns = sum(x * x for x in point)
+
+        hw_cost     = F(hw, 1) * self.Y
+        ns_cost     = F(ns, 8)
+        total_tax   = hw_cost + ns_cost
+        nrci        = F(10, 1) / (F(10, 1) + alpha * total_tax)
+
+        return {
+            "vector_sample":   list(point[:6]),
+            "hamming_weight":  hw,
+            "hw_cost_exact":   hw_cost,
+            "hw_cost_float":   float(hw_cost),
+            "norm_squared":    ns,
+            "ns_cost_exact":   ns_cost,
+            "ns_cost_float":   float(ns_cost),
+            "total_tax_exact": total_tax,
+            "total_tax_float": float(total_tax),
+            "nrci_exact":      nrci,
+            "nrci_float":      float(nrci),
+            "alpha":           alpha,
+            "Y_exact":         self.Y,
+        }
+
+    def audit_minimal_vector_classes(self) -> Dict[str, Any]:
+        """
+        Run `audit_vector_cost` on a representative vector from each of the 3
+        minimal-vector classes (A, B, C), plus the zero vector as a baseline.
+
+        This is the headline transparency report: it shows exactly how the
+        Hamming Weight and Norm² contribute to the TAX and NRCI for each
+        shape-class, with all values as exact Fractions.
+        """
+        mvs = self.enumerate_minimal_vectors()
+        zero = [0] * 24
+        return {
+            "Zero":        self.audit_vector_cost(zero),
+            "Class_A":     self.audit_vector_cost(list(mvs["Class_A"][0])),
+            "Class_B":     self.audit_vector_cost(list(mvs["Class_B"][0])),
+            "Class_C":     self.audit_vector_cost(list(mvs["Class_C"][0])),
+            "class_counts": mvs["counts"],
+            "total_minimal_vectors": mvs["total_count"],
+        }
 
     # ── Symmetry tax ──────────────────────────────────────────────────────────
     def calculate_symmetry_tax(self, point: List[int],
@@ -751,7 +1154,7 @@ class LeechLatticeEngine:
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  PART 6 — MONSTER GROUP  (26 sporadic simple groups)
+#  PART 6 — MONSTER GROUP  (26 sporadic simple groups - expand if you can)
 # ════════════════════════════════════════════════════════════════════════════════
 
 class MonsterGroup:
@@ -1472,7 +1875,7 @@ class TriadActivationEngine:
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  PART 10 — PARTICLE PHYSICS (UBPSourceCodeParticlePhysics)
+#  PART 10 — PARTICLE PHYSICS (UBPSourceCodeParticlePhysics - experimental not absolute)
 # ════════════════════════════════════════════════════════════════════════════════
 
 class UBPSourceCodeParticlePhysics:
@@ -2746,7 +3149,7 @@ class MathNetNoiseRunner:
 
 
 # ════════════════════════════════════════════════════════════════════════════════
-#  PART 16 — PROBLEM SET (33 entries + new physics/linalg)
+#  PART 16 — PROBLEM SET (33 entries + physics/linalg - expand if possible)
 # ════════════════════════════════════════════════════════════════════════════════
 
 NOISECORE_PROBLEMS = [
@@ -3447,6 +3850,12 @@ if __name__ == "__main__":
                     help="Run triad activation demo")
     ap.add_argument("--demo",      action="store_true",
                     help="Demo: (10+7)−3 with full fingerprints")
+    ap.add_argument("--audit",     action="store_true",
+                    help="Audit TAX/NRCI cost breakdown for all 3 minimal-vector classes")
+    ap.add_argument("--verify-minimal", action="store_true",
+                    help="Exhaustively verify 196,560 minimal vectors + MOG/Hexacode alignment")
+    ap.add_argument("--mog",       action="store_true",
+                    help="Demonstrate MOG/Hexacode decomposition on sample codewords")
     ap.add_argument("--output",    default="ubp_unified_v5",
                     help="Output filename stem")
     args = ap.parse_args()
@@ -3523,8 +3932,127 @@ if __name__ == "__main__":
                   f"M-grade={fp.get('monster_grade','-')}")
         print(f"\n  Triad: {alu.triad_snapshot()}")
 
+    if args.mog:
+        print("=" * 80)
+        print("MOG / HEXACODE DECOMPOSITION  (F_2^24 → F_4^6)")
+        print("=" * 80)
+        mog_v = GOLAY_ENGINE.mog_verify_all()
+        print(f"\n  Type 4 exhaustive test:")
+        print(f"    Total codewords:     {mog_v['total_codewords']}")
+        print(f"    MOG failures:        {mog_v['mog_failures']}")
+        print(f"    Alignment perfect:   {mog_v['alignment_perfect']}")
+        print(f"    Hexacode size:       {mog_v['hexacode_size']} words")
+        print(f"\n  Discovered MOG grid (cyclic bit → MOG cell), row r = GF(4) element r:")
+        for r in range(4):
+            row = GolayCodeEngine.MOG_GRID_BITS[r*6:(r+1)*6]
+            labels = ['0', '1', 'ω', 'ω²']
+            print(f"    row {r} (= {labels[r]}):  {list(row)}")
+        if mog_v['sample_decomposition']:
+            cw, hex_w = mog_v['sample_decomposition']
+            print(f"\n  Sample decomposition (first non-trivial codeword):")
+            print(f"    Codeword (24 bits):  {cw}")
+            print(f"    Hexacode word:       {hex_w}")
+            print(f"    Valid Hexacode?      {hex_w in set(GolayCodeEngine.build_hexacode())}")
+
+    if args.verify_minimal:
+        print("=" * 80)
+        print("EXHAUSTIVE VERIFICATION: 196,560 MINIMAL VECTORS + MOG ALIGNMENT")
+        print("=" * 80)
+        import time as _time
+        t0 = _time.time()
+        print("\n  [1/3] Enumerating all 196,560 minimal vectors...")
+        mvs = LEECH_ENGINE.enumerate_minimal_vectors()
+        t1 = _time.time()
+        print(f"        Done in {t1-t0:.2f}s.")
+        print(f"        Class A (±4,±4,0²²):    {mvs['counts']['A']:>6} vectors  (expected 1,104)")
+        print(f"        Class B (±2⁸,0¹⁶):      {mvs['counts']['B']:>6} vectors  (expected 97,152)")
+        print(f"        Class C (±3,±1²³):      {mvs['counts']['C']:>6} vectors  (expected 98,304)")
+        print(f"        ─────────────────────────────────────────")
+        print(f"        Total:                   {mvs['total_count']:>6} vectors  (expected 196,560)")
+        ok_total = mvs['total_count'] == 196560
+        print(f"        Kissing number OK:       {ok_total}")
+
+        print(f"\n  [2/3] Verifying norm² = 32 (×8 repr.) for all 3 classes...")
+        norm_A = all(sum(x*x for x in v) == 32 for v in mvs['Class_A'])
+        norm_B = all(sum(x*x for x in v) == 32 for v in mvs['Class_B'])
+        norm_C = all(sum(x*x for x in v) == 32 for v in mvs['Class_C'])
+        print(f"        Class A norm² = 32: {norm_A}  ({len(mvs['Class_A'])} vectors)")
+        print(f"        Class B norm² = 32: {norm_B}  ({len(mvs['Class_B'])} vectors)")
+        print(f"        Class C norm² = 32: {norm_C}  ({len(mvs['Class_C'])} vectors)")
+
+        print(f"\n  [3/3] Verifying mod-8 glue conditions...")
+        # Class A: all vectors should have Σ ≡ 0 (mod 8) (all-even coset)
+        glue_A = all(sum(v) % 8 == 0 for v in mvs['Class_A'])
+        glue_B = all(sum(v) % 8 == 0 for v in mvs['Class_B'])
+        glue_C = all(sum(v) % 8 == 4 for v in mvs['Class_C'])
+        print(f"        Class A Σ ≡ 0 (mod 8):  {glue_A}  (all-even coset)")
+        print(f"        Class B Σ ≡ 0 (mod 8):  {glue_B}  (all-even coset)")
+        print(f"        Class C Σ ≡ 4 (mod 8):  {glue_C}  (all-odd coset)")
+
+        print(f"\n  [4/4] Verifying MOG/Hexacode alignment (Type 4 exhaustive)...")
+        mog_v = GOLAY_ENGINE.mog_verify_all()
+        print(f"        {mog_v['mog_failures']}/{mog_v['total_codewords']} codewords "
+              f"failed MOG/Hexacode alignment")
+        print(f"        Alignment perfect: {mog_v['alignment_perfect']}")
+
+        print(f"\n  {'='*40}")
+        all_ok = ok_total and norm_A and norm_B and norm_C and glue_A and glue_B and glue_C and mog_v['alignment_perfect']
+        print(f"  ALL CHECKS PASSED: {all_ok}")
+        print(f"  Total time: {_time.time()-t0:.2f}s")
+        print(f"  {'='*40}")
+
+    if args.audit:
+        print("=" * 80)
+        print("TAX / NRCI COST AUDIT  —  Exact Fraction Transparency Report")
+        print("=" * 80)
+        print(f"\n  Y (wobble constant) = 1 / (π + 2/π)")
+        print(f"    exact  = {LEECH_ENGINE.Y}")
+        print(f"    float  ≈ {float(LEECH_ENGINE.Y):.12f}")
+        print(f"\n  Formula:")
+        print(f"    Topological Cost  = Hamming Weight × Y")
+        print(f"    Geometric Cost    = Norm² / 8        (×8 integer repr.)")
+        print(f"    Total Tax         = (HW × Y) + (Norm² / 8)")
+        print(f"    NRCI              = 10 / (10 + α × Tax)    (α = 1 by default)")
+        print()
+
+        audit = LEECH_ENGINE.audit_minimal_vector_classes()
+        for label in ["Zero", "Class_A", "Class_B", "Class_C"]:
+            a = audit[label]
+            print(f"  ── {label} ──────────────────────────────────────────────────")
+            print(f"    Vector (first 6):     {a['vector_sample']}")
+            print(f"    Hamming Weight:       {a['hamming_weight']}")
+            print(f"    Norm² (×8 repr.):     {a['norm_squared']}")
+            print(f"    ────────────────────────────────────────────")
+            print(f"    Topological Cost  (HW × Y):")
+            print(f"      exact  = {a['hw_cost_exact']}")
+            print(f"      float  ≈ {a['hw_cost_float']:.12f}")
+            print(f"    Geometric Cost    (Norm² / 8):")
+            print(f"      exact  = {a['ns_cost_exact']}")
+            print(f"      float  ≈ {a['ns_cost_float']:.12f}")
+            print(f"    ────────────────────────────────────────────")
+            print(f"    TOTAL SYMMETRY TAX:")
+            print(f"      exact  = {a['total_tax_exact']}")
+            print(f"      float  ≈ {a['total_tax_float']:.12f}")
+            print(f"    NRCI (α = {a['alpha']}):")
+            print(f"      exact  = {a['nrci_exact']}")
+            print(f"      float  ≈ {a['nrci_float']:.12f}")
+            print()
+        print(f"  ── SUMMARY ──────────────────────────────────────────────────")
+        print(f"    Total minimal vectors enumerated: {audit['total_minimal_vectors']}")
+        print(f"      Class A: {audit['class_counts']['A']:>6}    Class B: {audit['class_counts']['B']:>6}    Class C: {audit['class_counts']['C']:>6}")
+        print()
+        print(f"  NRCI progression (float, for human reading):")
+        for label in ["Zero", "Class_A", "Class_B", "Class_C"]:
+            print(f"    {label:<10}  NRCI = {audit[label]['nrci_float']:.6f}   "
+                  f"(HW={audit[label]['hamming_weight']}, Norm²={audit[label]['norm_squared']})")
+        print()
+        print(f"  Reading: Class A is the most coherent (lowest TAX, highest NRCI).")
+        print(f"  Class C, with Hamming Weight 24 (all bits active), carries the")
+        print(f"  highest topological cost and crosses below the 0.500 NRCI horizon.")
+
     if args.run or not any([args.test, args.calibrate, args.leech, args.monster,
-                            args.bw, args.physics, args.triad, args.demo]):
+                            args.bw, args.physics, args.triad, args.demo,
+                            args.audit, args.verify_minimal, args.mog]):
         run_all(
             output_path=f"{args.output}_results.json",
             report_path=f"{args.output}_report.md",
